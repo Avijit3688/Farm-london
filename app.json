@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "farm_london",
-    "slug": "farm_london",
+    "name": "FARM_LONDON",
+    "slug": "FARM_LONDON",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
