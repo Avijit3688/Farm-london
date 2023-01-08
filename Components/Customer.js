@@ -59,11 +59,11 @@ const Customer = () => {
       Password: e.target.value
     })
   }
-  navigator.geolocation.getCurrentPosition(showPosition);
-  function showPosition(position) {
-    setCookie("Latitude",position.coords.latitude)
-    setCookie("Longitude",position.coords.longitude)
-  }
+  // navigator.geolocation.getCurrentPosition(showPosition);
+  // function showPosition(position) {
+  //   setCookie("Latitude",position.coords.latitude)
+  //   setCookie("Longitude",position.coords.longitude)
+  // }
   const handleLogin = () => {
     for(var user of users){
       if(user.Mobile==userDetails.Mobile && user.Pwd==userDetails.Password){

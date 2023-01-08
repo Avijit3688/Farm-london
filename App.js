@@ -2,6 +2,7 @@
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './Components/Home';
 import Customer from './Components/Customer';
 import Vendor from './Components/Vendor';
@@ -11,18 +12,15 @@ import Contact from './Components/Contact';
 import SignUp from './Components/SignUp';
 import BuyDetails from './Components/BuyDetails';
 import Errorpage from './Components/Errorpage';
-
+import SettingsScreen from './Components/SettingsScreen';
 // import First from './Components/First';
-
 // import ContactUs from './Buttons/ContactUs';
 // import Service from './Buttons/Service';
 // import ServiceInner from './Components/ServiceInner';
-
-
 export default function App() {
   const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
   return (
-
     <NavigationContainer>
     <Stack.Navigator initialRouteName='Home'>
       <Stack.Screen name="Home" options={{headerShown:false}} component={Home} />
@@ -34,6 +32,10 @@ export default function App() {
       <Stack.Screen name="SignUp" options={{headerShown:false}} component={SignUp} />
       <Stack.Screen name="Buyingdetails" options={{headerShown:false}} component={BuyDetails} />
       <Stack.Screen name="Errorpage" options={{headerShown:false}} component={Errorpage} />
+    <Tab.Navigator>
+      <Tab.Screen name="products" component={Dashboard} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
     </Stack.Navigator>
   </NavigationContainer>
   );

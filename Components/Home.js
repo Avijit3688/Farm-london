@@ -61,25 +61,22 @@ const requestPhonePermission = async () => {
           justifyContent: 'center',
         },
   });
-
 const Home = () => {
-
-
     const navigation=useNavigation()
     useEffect(() => {
         requestPhonePermission()
     }, [])
 
-    navigator.geolocation.getCurrentPosition(showPosition);
-    function showPosition(position) {
-      console.log("position",position);
-      console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyD2Qh7j87r2z90kMhOWqK0DQpEOGgugaPw`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data",data);
-      });
-    }
+    // navigator.geolocation.getCurrentPosition(showPosition);
+    // function showPosition(position) {
+    //   console.log("position",position);
+    //   console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
+    //   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyD2Qh7j87r2z90kMhOWqK0DQpEOGgugaPw`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log("data",data);
+    //   });
+    // }
 
   return (
     <View style={styles.container}>
