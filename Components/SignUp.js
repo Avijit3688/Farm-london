@@ -17,7 +17,7 @@ const SignUp = () => {
     Cpwd:'',}}
     onSubmit={values => {
       axios.post("http://localhost:4080/registerusers",values)
-      ToastAndroid.show("Registered successfully", ToastAndroid.SHORT);
+      // ToastAndroid.show("Registered successfully", ToastAndroid.SHORT);
       navigation.navigate("Customer")
   }}
   >

@@ -5,7 +5,7 @@ const Errorpage = () => {
     const navigation=useNavigation()
   return (
     <View>
-        <View stzzyle={styles.container}>
+        <View style={styles.container}>
         <Text style={{color:"red"}}>Invalid Credentials</Text>
         </View>
         <View style={{

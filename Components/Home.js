@@ -1,9 +1,9 @@
 import React from 'react'
-import { useEffect } from 'react'
-import { Button, Image, PermissionsAndroid,Text, View } from "react-native";
+import { useEffect,useState } from 'react'
+import { Button, Image, PermissionsAndroid,Text, View,Modal,Pressable,Alert } from "react-native";
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Modal from 'react-bootstrap/Modal';
+import Geolocation from '@react-native-community/geolocation';
 const requestPhonePermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -20,28 +20,6 @@ const requestPhonePermission = async () => {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log("You can use the call log");
-        <Modal
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Modal heading
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-            FarmLondon app gives portal for both farmers and customers to sell and buy their products respectively.
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel sunt ullam impedit voluptatem eligendi aliquid in eius minus odio? Nihil debitis veniam cum quod exercitationem. Accusantium blanditiis libero itaque repudiandae a dolores. Nostrum nihil expedita accusamus velit? Temporibus eius, quam at voluptatum suscipit alias consequuntur voluptas, ipsum deserunt, maiores quibusdam?
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-                onPress={()=>setModalshow(false)}
-                title="Got It"
-                color="red">
-        </Button>
-      </Modal.Footer>
-        </Modal>
       } else {
         console.log("Call permission denied");
       }
@@ -60,26 +38,71 @@ const requestPhonePermission = async () => {
           alignItems: 'center',
           justifyContent: 'center',
         },
+        centeredView: {
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 22
+        },
+        modalView: {
+          margin: 20,
+          backgroundColor: "white",
+          borderRadius: 20,
+          padding: 35,
+          alignItems: "center",
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 4,
+          elevation: 5
+        },
+        button: {
+          borderRadius: 20,
+          padding: 10,
+          elevation: 2
+        },
+        buttonClose: {
+          backgroundColor: "red",
+        },
+        textStyle: {
+          color: "white",
+          fontWeight: "bold",
+          textAlign: "center"
+        },
+        modalText: {
+          marginBottom: 15,
+          textAlign: "center"
+        }
   });
+
+
 const Home = () => {
+  useEffect(() => {
+    setModalVisible(true)
+  }, [])
+  const [modalVisible, setModalVisible] = useState(false);
+
     const navigation=useNavigation()
     useEffect(() => {
         requestPhonePermission()
     }, [])
 
-    // navigator.geolocation.getCurrentPosition(showPosition);
-    // function showPosition(position) {
-    //   console.log("position",position);
-    //   console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
-    //   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyD2Qh7j87r2z90kMhOWqK0DQpEOGgugaPw`)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log("data",data);
-    //   });
-    // }
-
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
+        fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyD2Qh7j87r2z90kMhOWqK0DQpEOGgugaPw`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("data",data);
+        });
+       }
+    );
   return (
-    <View style={styles.container}>
+    <>
+        <View style={styles.container}>
       <Text>
       <Image
       style={styles.Logo}
@@ -108,6 +131,33 @@ const Home = () => {
       />
       </View>
     </View>
+    <View style={styles.centeredView}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>
+                   FarmLondon app gives portal for both farmers and customers to sell and buy their products respectively.Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel sunt ullam impedit voluptatem eligendi aliquid in eius minus odio? Nihil debitis veniam cum quod exercitationem. Accusantium blanditiis libero itaque repudiandae a dolores. Nostrum nihil expedita accusamus velit? Temporibus eius, quam at voluptatum suscipit alias consequuntur voluptas, ipsum deserunt, maiores quibusdam?
+            </Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Got it</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      </View>
+    </>
+
   )
 }
 

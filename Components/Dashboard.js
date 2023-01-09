@@ -1,62 +1,89 @@
-import { Button, StyleSheet, Text, TextInput, View,Picker,Check } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, TextInput, View,TouchableOpacity,Image,CheckBox } from 'react-native';
+import React, { useEffect } from 'react';
 import { Icon } from '@rneui/themed';
 import { useState } from 'react';
-import { Card } from 'react-bootstrap';
+import SelectDropdown from 'react-native-select-dropdown'
 import {useCookies } from 'react-cookie';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import FilterScreen from './FilterScreen';
+import {Button,Card , Title ,Paragraph } from 'react-native-paper';
+import Profile from './Profile';
+import SettingsScreen from './SettingsScreen';
+import Cart from './Cart';
+import BottomBar from './BottomBar';
 const Dashboard = () => {
     const [products, setProducts] = useState([])
+    const [name, setName] = useState([])
     const [cookies,setCookie,removeCookie]=useCookies();
     const [inputData , setInputData] =useState("");
-    const [searchData , setSearchData] =useState("");
-    const [searchResult , setSearchResult] =useState(false);
-    const [filterClick , setFilterClick] =useState(false);
-    const [items, setitems] = useState([])
+    // const [selectItem , setSelectItem] =useState("");
+    const Drawer = createDrawerNavigator();
+    const Tab = createBottomTabNavigator();
+
     fetch('https://fakestoreapi.com/products')
         .then(res => res.json())
         .then(result => setProducts(result))
         function handleSignOut(){
+            console.log("signout pressed")
             removeCookie("name")
-            navigate("Customer")
+            navigation.navigate('Customer')
           }
-          function handleSearch(e){
+    const filterBy = ["Latest"," Popularity","Price[Highest-lowsest]", "Price[Lowest-highest]", "Name[A-Z]", "Name[Z-A]"]
+    function handleSearch(e){
+        console.log(e.target.value);
             setInputData(e.target.value)
-            if(!inputData){
-                setSearchResult(false)
-            }
-            if(inputData){
-                setSearchResult(true)
-            }
         }
-        const handleFilterChange=()=>{
-            switch(e.target.value){
-                case "Sort By Price[Highest-lowsest]":
-                   return  setitems(
+        useEffect(() => {
+            fetch('https://fakestoreapi.com/products')
+            .then(res => res.json())
+            .then(result => setProducts(result))
+            setName(products)
+
+        }, [name])
+        useEffect(() => {
+            fetch('https://fakestoreapi.com/products')
+            .then(res => res.json())
+            .then(result => setName(result))
+            console.log("name",name);
+        }, [])
+
+
+const handleFilterChange=(selectItem)=>{
+                switch(selectItem){
+                case "Price[Highest-lowsest]":
+                   return  setName(
                             //ascending-console.log(products.sort((p1, p2) => (p1.price < p2.price) ? -1 : 0))
                             //Descending-console.log(products.sort((p1, p2) => (p1.price > p2.price) ? -1 : 0))
-                            products.sort((p1, p2) => (p1.price > p2.price) ? -1 : 0)
+                            products.sort((p1, p2) => (p1.price > p2.price) ? -1 : 0),
+                            console.log(products.sort((p1, p2) => (p1.price > p2.price) ? -1 : 0))
                     )
-                case "Sort By Price[Lowest-highest]":
-                   return  setitems(
+                case "Price[Lowest-highest]":
+                   return  setName(
                            products.sort((p1, p2) => (p1.price < p2.price) ? -1 : 0)
                     )
-                case "Sort By Name[A-Z]":
-                   return  setitems(
+                case "Name[A-Z]":
+                   return  setName(
                         products.sort((p1, p2) => (p1.title < p2.title) ? -1 : 0)
                     )
-                case "Sort By Name[Z-A]":
-                   return  setitems(
+
+                case "Name[Z-A]":
+                   return  setName(
                             products.sort((p1, p2) => (p1.title > p2.title) ? -1 : 0)
                     )
-                case "Sort By popularity":
-                   return  setitems(
+                case "Popularity":
+                   return  setName(
                          products.map((ele)=>ele.sort((p1,p2)=>(p1.rating.rate>p2.rating.rate)? -1:0))
                     )
-
+                default:
+                   return  setName(
+                           products
+                    )
             }
-        }
-
+}
+console.log("products",name);
     return (
+        <>
         <View>
             <View style={{ width: "100%", height: 60, backgroundColor: "red" }}>
                 <View style={{
@@ -77,7 +104,9 @@ const Dashboard = () => {
                             name='notifications'
                             type='Ionicons'
                         />
+
                         </Text>
+
                 </View>
             </View>
             <View style={{
@@ -86,166 +115,131 @@ const Dashboard = () => {
                     justifyContent: 'space-between',
                 }}>
                 <Text>Hello {cookies.name}</Text>
-                <Text onPress={()=>{handleSignOut}}>Signout</Text>
+                <Text onPress={handleSignOut}>Signout</Text>
             </View>
             <View style={{
                         display:"flex",
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
             }}>
                 <TextInput
                 style={styles.input}
                 placeholder="Search for Goods,Name,etc..."
-                onKeyPress={handleSearch}
-            />
-                        <Icon
-                            onPress={()=>setFilterClick(true)}
-                            name='filter'
-                            type='AntDesign'
-                        />
+                onChange={handleSearch}
+                />
             </View>
             <View>
-                {
-                    !searchResult?
-                    <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row" }} >
-                    {
-                        items.map((data) =>
-                            <Card style={{ margin: "10px", width: "40vw" }}>
-                                {/* <Card.Img style={{height:100,width:100}} src={data.image}> */}
-                                {/* </Card.Img> */}
-                                <Card.Body>
-                                    <Card.Title>{data.title}</Card.Title>
-                                    <Card.Text>{data.description.slice(0, 200)}</Card.Text>
-                                    <View style={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        justifyContent: 'space-around',
-                                    }}>
-                                        <Card.Text style={{ color: "blue" }}>
-                                            <Icon
-                                                name='star'
-                                                type='AntDesign'
-                                                color='green'
-                                            />
-                                            <Text>{data.rating.rate}[{data.rating.count}]</Text>
-
-                                        </Card.Text>
-                                        <Card.Text style={{ color: "green" }}>
-                                            <Text>&#8377;{data.price}</Text>
-                                        </Card.Text>
-
-                                    </View>
-                                    <Button
-                                        onPress={() =>
-                                            navigation.navigate('Buyingdetails')
-                                        }
-                                        title="BuyNow"
-                                        color="orange"
-                                        accessibilityLabel="Buy items"
-                                    />
-                                    <hr />
-                                </Card.Body>
-                            </Card>
-                        )
-                    }
-                    </View> :
-                    <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row" }} >
-                                {
-
-                                    products.filter((items)=>items.includes(inputData)).map((data) =>
-                                        <Card style={{ margin: "10px", width: "40vw" }}>
-                                            {/* <Card.Img style={{height:100,width:100}} src={data.image}> */}
-                                            {/* </Card.Img> */}
-                                            <Card.Body>
-                                                <Card.Title>{data.title}</Card.Title>
-                                                <Card.Text>{data.description.slice(0, 200)}</Card.Text>
-                                                <View style={{
-                                                    display: "flex",
-                                                    flexDirection: "row",
-                                                    justifyContent: 'space-around',
-                                                }}>
-                                                    <Card.Text style={{ color: "blue" }}>
-                                                        <Icon
-                                                            name='star'
-                                                            type='AntDesign'
-                                                            color='green'
-                                                        />
-                                                        <Text>{data.rating.rate}[{data.rating.count}]</Text>
-
-                                                    </Card.Text>
-                                                    <Card.Text style={{ color: "green" }}>
-                                                        <Text>&#8377;{data.price}</Text>
-                                                    </Card.Text>
-
-                                                </View>
-                                                <Button
-                                                    onPress={() =>
-                                                        navigation.navigate('Buyingdetails')
-                                                    }
-                                                    title="BuyNow"
-                                                    color="orange"
-                                                    accessibilityLabel="Buy items"
-                                                />
-                                                <hr />
-                                            </Card.Body>
-                                        </Card>
-                                    )
-                                }
-                    </View>
-                }
-                {
-                    filterClick?<>
-                        <Icon
-                            onPress={()=>setFilterClick(false)}
-                            name='cross'
-                            type='Entypo'
-                        />
-                    <View style={styles.container}>
+                <View>
+                <View style={styles.container}>
                         <Text>Sort By</Text>
-                        <CheckBox
-                        value="Sort By popularity"
-                        onValueChange={handleFilterChange}
+                        <SelectDropdown
+	                    data={filterBy}
+                        onSelect={handleFilterChange}
+	                    // onSelect={(selectedItem, index) => {
+                        //     setSelectItem(selectedItem)
+	                	// console.log(selectedItem, index)
+	                    // }}
                         />
-                        <CheckBox
-                        value="Sort By Price[Highest-lowsest]"
-                        onValueChange={handleFilterChange}
-                        />
-                        <CheckBox
-                        value="Sort By Price[Lowest-highest]"
-                        onValueChange={handleFilterChange}
-                        />
-                        <CheckBox
-                        value="Sort By Name[A-Z]"
-                        onValueChange={handleFilterChange}
-                        />
-                        <CheckBox
-                        value="Sort By Name[Z-A]"
-                        onValueChange={handleFilterChange}
-                        />
-                      {/* <Picker
-                        selectedValue={selectedValue}
-                        style={{ height: 50, width: 150}}
-                        onValueChange={handleFilterChange}
-                      >
-                        <Picker.Item label="Sort By popularity" value="Sort By popularity" />
-                        <Picker.Item label="Sort By Price[Highest-lowsest]" value="Sort By Price[Highest-lowsest]" />
-                        <Picker.Item label="Sort By Price[Lowest-highest]" value="Sort By Price[Lowest-highest]" />
-                        <Picker.Item label="Sort By Name[A-Z]" value="Sort By Name[A-Z]" />
-                        <Picker.Item label="Sort By Name[Z-A]" value="Sort By Name[Z-A]" />
-                      </Picker> */}
                     </View>
-                     </>:""
-                }
-
-
-
+                </View>
 
             </View>
-        </View>
+                {/* <Drawer.Navigator>
+                    <Drawer.Screen
+                    key='products'
+                    name="products"
+                    component={FilterScreen}
+                    />
+                </Drawer.Navigator> */}
+            <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row" }} >
+             {
+                name.filter((user)=>user.title.toLowerCase().includes(inputData)).length>0 ?
+                name.filter((user)=>user.title.toLowerCase().includes(inputData)).map((data)=>
+            //     <Card style={{ margin: "10px", width: "40vw" }}>
+            //     <Card.Image
+            //     style={{height:100,width:100}}
+            //     source={{ uri: data.image }}
+            //      />
+            //     <Card.Body>
+            //         <Card.Title>{data.title}</Card.Title>
+            //         <Card.Text>{data.description.slice(0, 200)}</Card.Text>
+            //         <View style={{
+            //             display: "flex",
+            //             flexDirection: "row",
+            //             justifyContent: 'space-around',
+            //         }}>
+            //             <Card.Text style={{ color: "blue" }}>
+            //                 <Icon
+            //                     name='star'
+            //                     type='AntDesign'
+            //                     color='green'
+            //                 />
+            //                 <Text>{data.rating.rate}[{data.rating.count}]</Text>
+
+            //             </Card.Text>
+            //             <Card.Text style={{ color: "green" }}>
+            //                 <Text>&#8377;{data.price}</Text>
+            //             </Card.Text>
+
+            //         </View>
+            //         <Button
+            //             onPress={() =>
+            //                 navigation.navigate('Buyingdetails')
+            //             }
+            //             title="BuyNow"
+            //             color="orange"
+            //             accessibilityLabel="Buy items"
+            //         />
+            //         <hr />
+            //     </Card.Body>
+            //    </Card>
+
+            <Card style={{ margin: "10px", width: "40vw" }}>
+            <Card.Content>
+                <Title>{data.title}</Title>
+            </Card.Content>
+            <Card.Cover
+                 style={{height:100,width:100}}
+                 source={{ uri: data.image }}/>
+           <Card.Content>
+            <Paragraph>{data.description.slice(0, 200)}</Paragraph>
+            </Card.Content>
+           <Card.Content>
+            <Paragraph>{data.description.slice(0, 200)}</Paragraph>
+            </Card.Content>
+            <View style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: 'space-around',
+            }}>
+                <Card.Content style={{ color: "blue" }}>
+                    <Icon
+                        name='star'
+                        type='AntDesign'
+                        color='green'
+                    />
+                    <Text>{data.rating.rate}[{data.rating.count}]</Text>
+                </Card.Content>
+                <Card.Content style={{ color: "green" }}>
+                    <Text>&#8377;{data.price}</Text>
+                </Card.Content>
+            </View>
+            <Card.Actions>
+              <Button>Buy Now</Button>
+            </Card.Actions>
+          </Card>
+                ):<Text>No product found</Text>
+             }
+             </View>
+            <View>
+            </View>
+{/* <View style={{position:"absolute",bottom:"4px"}}>
+<BottomBar  />
+</View> */}
+          </View>
+    </>
     )
 }
-
 export default Dashboard
-
 const styles = StyleSheet.create({
     input: {
         height: 40,
