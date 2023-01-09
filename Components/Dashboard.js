@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import FilterScreen from './FilterScreen';
 import {Button,Card , Title ,Paragraph } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import Profile from './Profile';
 import SettingsScreen from './SettingsScreen';
 import Cart from './Cart';
@@ -20,7 +21,7 @@ const Dashboard = () => {
     // const [selectItem , setSelectItem] =useState("");
     const Drawer = createDrawerNavigator();
     const Tab = createBottomTabNavigator();
-
+    const navigation = useNavigation()
     fetch('https://fakestoreapi.com/products')
         .then(res => res.json())
         .then(result => setProducts(result))
@@ -224,7 +225,7 @@ console.log("products",name);
                 </Card.Content>
             </View>
             <Card.Actions>
-              <Button>Buy Now</Button>
+              <Button onPress={()=>{navigation.navigate('Payment')}}>Buy Now</Button>
             </Card.Actions>
           </Card>
                 ):<Text>No product found</Text>

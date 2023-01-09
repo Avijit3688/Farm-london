@@ -18,6 +18,7 @@ import Notifications from './Components/Notifications';
 import Start1 from './Components/Start1';
 import Start2 from './Components/Start2';
 import Start3 from './Components/Start3';
+import Payment from './Components/Payment';
 
 // import First from './Components/First';
 
@@ -47,6 +48,7 @@ export default function App() {
       <Stack.Screen name="Start1" options={{headerShown:false}}  component={Start1} />
       <Stack.Screen name="Start2" options={{headerShown:false}} component={Start2} />
       <Stack.Screen name="Start3" options={{headerShown:false}} component={Start3} />
+      <Stack.Screen name="Payment" component={Payment} />
     </Stack.Navigator>
   </NavigationContainer>
   {/* <NavigationContainer>
