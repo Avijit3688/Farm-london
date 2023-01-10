@@ -79,18 +79,7 @@ const Customer = () => {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         // setCookie("name",user.FirstName);
         console.log("You can access location");
-        Geolocation.getCurrentPosition(
-          (position) => {
-            console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
-            setCookie("Latitude",position.coords.latitude)
-            setCookie("Longitude",position.coords.longitude)
-            fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyD2Qh7j87r2z90kMhOWqK0DQpEOGgugaPw`)
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("data",data);
-            });
-           }
-        );
+
       } else {
         console.log("Location permission denied");
       }
@@ -98,6 +87,18 @@ const Customer = () => {
       console.warn(err);
     }
   };
+  Geolocation.getCurrentPosition(
+    (position) => {
+      console.log(`Latitude: ${position.coords.latitude} Longitude: ${position.coords.longitude}`);
+      setCookie("Latitude",position.coords.latitude)
+      setCookie("Longitude",position.coords.longitude)
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyD2Qh7j87r2z90kMhOWqK0DQpEOGgugaPw`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("data",data);
+      });
+     }
+  );
   useEffect(()=>{
     axios.get("http://localhost:4080/getusers")
          .then(response=>{

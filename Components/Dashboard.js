@@ -22,7 +22,7 @@ const Dashboard = () => {
     const Drawer = createDrawerNavigator();
     const Tab = createBottomTabNavigator();
     const navigation = useNavigation()
-    fetch('https://fakestoreapi.com/products')
+    fetch('https://6327cb305731f3db995e3372.mockapi.io/ishop')
         .then(res => res.json())
         .then(result => setProducts(result))
         function handleSignOut(){
@@ -30,7 +30,7 @@ const Dashboard = () => {
             removeCookie("name")
             navigation.navigate('Customer')
           }
-    const filterBy = ["Latest"," Popularity","Price[Highest-lowsest]", "Price[Lowest-highest]", "Name[A-Z]", "Name[Z-A]"]
+    const filterBy = ["Latest"," Popularity","Price[Highest-lowsest]", "Price[Lowest-highest]", "Name[A-Z]", "Name[Z-A]","Distance"]
     function handleSearch(e){
         console.log(e.target.value);
             setInputData(e.target.value)
@@ -50,6 +50,37 @@ const Dashboard = () => {
         }, [])
 
 
+// JavaScript program to calculate Distance Between
+// Two Points on Earth
+
+    function distance(lat1,
+        lat2, lon1, lon2)
+{
+
+// The math module contains a function
+// named toRadians which converts from
+// degrees to radians.
+lon1 =  lon1 * Math.PI / 180;
+lon2 = lon2 * Math.PI / 180;
+lat1 = lat1 * Math.PI / 180;
+lat2 = lat2 * Math.PI / 180;
+
+// Haversine formula
+let dlon = lon2 - lon1;
+let dlat = lat2 - lat1;
+let a = Math.pow(Math.sin(dlat / 2), 2)
+    + Math.cos(lat1) * Math.cos(lat2)
+    * Math.pow(Math.sin(dlon / 2),2);
+
+let c = 2 * Math.asin(Math.sqrt(a));
+
+// Radius of earth in kilometers. Use 3956
+// for miles
+let r = 6371;
+
+// calculate the result
+return(c * r);
+}
 const handleFilterChange=(selectItem)=>{
                 switch(selectItem){
                 case "Price[Highest-lowsest]":
@@ -75,6 +106,10 @@ const handleFilterChange=(selectItem)=>{
                 case "Popularity":
                    return  setName(
                          products.map((ele)=>ele.sort((p1,p2)=>(p1.rating.rate>p2.rating.rate)? -1:0))
+                    )
+                case "Distance":
+                   return  setName(
+                    console.log("products",products.sort((p1,p2)=>(distance(cookies.Latitude,p1.latitude,cookies.Longitude,p2. longitude)>distance(cookies.Latitude,p2.latitude,cookies.Longitude,p2.longitude))? -1:0))
                     )
                 default:
                    return  setName(
@@ -131,8 +166,9 @@ console.log("products",name);
             <View>
                 <View>
                 <View style={styles.container}>
-                        <Text>Sort By</Text>
+                        <Text style={{color:"lightblue"}}>Sort By</Text>
                         <SelectDropdown
+                        searchInputStyle={{Color:"lightblue"}}
 	                    data={filterBy}
                         onSelect={handleFilterChange}
 	                    // onSelect={(selectedItem, index) => {
