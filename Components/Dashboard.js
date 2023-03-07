@@ -13,6 +13,8 @@ import Profile from './Profile';
 import SettingsScreen from './SettingsScreen';
 import Cart from './Cart';
 import BottomBar from './BottomBar';
+import { NavigationContainer } from '@react-navigation/native';
+
 const Dashboard = () => {
     const [products, setProducts] = useState([])
     const [name, setName] = useState([])
@@ -22,9 +24,9 @@ const Dashboard = () => {
     const Drawer = createDrawerNavigator();
     const Tab = createBottomTabNavigator();
     const navigation = useNavigation()
-    fetch('https://6327cb305731f3db995e3372.mockapi.io/ishop')
-        .then(res => res.json())
-        .then(result => setProducts(result))
+    // fetch('https://6327cb305731f3db995e3372.mockapi.io/ishop')
+    //     .then(res => res.json())
+    //     .then(result => setProducts(result))
         function handleSignOut(){
             console.log("signout pressed")
             removeCookie("name")
@@ -48,8 +50,6 @@ const Dashboard = () => {
             .then(result => setName(result))
             console.log("name",name);
         }, [])
-
-
 // JavaScript program to calculate Distance Between
 // Two Points on Earth
 
@@ -187,7 +187,7 @@ console.log("products",name);
                     component={FilterScreen}
                     />
                 </Drawer.Navigator> */}
-            <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row" }} >
+            <View style={{ display: "flex", flexWrap: "wrap", flexDirection: "row",marginBottom:"6vh" }} >
              {
                 name.filter((user)=>user.title.toLowerCase().includes(inputData)).length>0 ?
                 name.filter((user)=>user.title.toLowerCase().includes(inputData)).map((data)=>
@@ -267,9 +267,10 @@ console.log("products",name);
                 ):<Text>No product found</Text>
              }
              </View>
-            <View>
-            </View>
-{/* <View style={{position:"absolute",bottom:"4px"}}>
+  <NavigationContainer independent={true} style={{position:"absolute",bottom:"4px"}}>
+    <BottomBar/>
+  </NavigationContainer>
+{/* <View >
 <BottomBar  />
 </View> */}
           </View>

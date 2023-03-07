@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
+import { Button } from 'react-native'
 
 const Payment = () => {
   return (
     <View>
-      <Text>Payment</Text>
+        <Button>Pay with card</Button>
     </View>
   )
 }

@@ -13,12 +13,12 @@ const BottomBar = () => {
     initialRouteName="Settings"
     screenOptions={{
       tabBarStyle: {
-        backgroundColor: "#03dbfc",
+        backgroundColor: "lightgrey",
+        position:"fixed"
       },
       tabBarActiveTintColor: "white",
     }}
   >
-
                 <Tab.Screen name="Buying Zone"  component={Dashboard} />
                 <Tab.Screen name="My cart"  component={Cart} />
                 <Tab.Screen name="My Profile" component={Profile} />

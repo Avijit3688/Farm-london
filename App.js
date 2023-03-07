@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+
 import Home from './Components/Home';
 import Customer from './Components/Customer';
 import Vendor from './Components/Vendor';
@@ -19,6 +20,7 @@ import Start1 from './Components/Start1';
 import Start2 from './Components/Start2';
 import Start3 from './Components/Start3';
 import Payment from './Components/Payment';
+// import { StripeProvider } from '@stripe/stripe-react-native';
 
 // import First from './Components/First';
 
@@ -31,7 +33,13 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   const Drawer = createDrawerNavigator();
 
+
   return (
+    // <StripeProvider
+    //   publishableKey="pk_test_51M8lmWSEqSe94Fe8W3q7kpDkVRWboHEb7WYYptbYVJh1WstNEPH1TiEwl9WNLkoMrUmZruw0xzhGsq6Hd5w9UWjX00nZZLE4tI"
+    //   // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    //   // merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
+    // >
 <>
     <NavigationContainer>
     <Stack.Navigator initialRouteName='Start1'>
@@ -45,25 +53,26 @@ export default function App() {
       <Stack.Screen name="Buyingdetails"options={{headerTitle: ""}}  component={BuyDetails} />
       <Stack.Screen name="Errorpage" options={{headerTitle: ""}} component={Errorpage} />
       <Stack.Screen name="Notifications" options={{headerTitle: ""}} component={Notifications} />
-      <Stack.Screen name="Start1" options={{headerShown:false}}  component={Start1} />
+      <Stack.Screen name="Start1" options={{headerShown:false}} component={Start1} />
       <Stack.Screen name="Start2" options={{headerShown:false}} component={Start2} />
       <Stack.Screen name="Start3" options={{headerShown:false}} component={Start3} />
       <Stack.Screen name="Payment" component={Payment} />
     </Stack.Navigator>
   </NavigationContainer>
-  {/* <NavigationContainer>
-  <Drawer.Navigator>
-    <Drawer.Screen
-    key='products'
-    name="products"
-    component={Dashboard}
-    />
-  </Drawer.Navigator>
-  </NavigationContainer> */}
-  {/* <NavigationContainer>
-    <BottomBar/>
-  </NavigationContainer> */}
+
 </>
+
+  // {/* <NavigationContainer>
+  // <Drawer.Navigator>
+  //   <Drawer.Screen
+  //   key='products'
+  //   name="products"
+  //   component={Dashboard}
+  //   />
+  // </Drawer.Navigator>
+  // </NavigationContainer> */}
+
+  // </StripeProvider>
   );
 }
 const styles = StyleSheet.create({
