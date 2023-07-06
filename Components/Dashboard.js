@@ -109,7 +109,7 @@ const handleFilterChange=(selectItem)=>{
                     )
                 case "Distance":
                    return  setName(
-                    console.log("products",products.sort((p1,p2)=>(distance(cookies.Latitude,p1.latitude,cookies.Longitude,p2. longitude)>distance(cookies.Latitude,p2.latitude,cookies.Longitude,p2.longitude))? -1:0))
+                        products.sort((p1,p2)=>(distance(cookies.Latitude,p1.latitude,cookies.Longitude,p2. longitude)>distance(cookies.Latitude,p2.latitude,cookies.Longitude,p2.longitude))? -1:0))
                     )
                 default:
                    return  setName(
